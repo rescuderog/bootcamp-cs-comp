@@ -127,9 +127,24 @@ export function CalcularCodigo(nodo: Nodo | null): string {
     return codigo.split('').reverse().join('');
 }
 
+export function CalcularSimbolo(codigo: string, arbol: ArbolBinarioHuffman): string {
+    let codigo_array = codigo.split('');
+    let currentNode = arbol.head;
+    for(let cod of codigo_array) {
+        const cod_nro = Number(cod);
+        if(cod_nro === NodoId.NodoL) {
+            currentNode = currentNode.nodo_izq!;
+        } else {
+            currentNode = currentNode.nodo_der!;
+        }
+    }
+
+    return currentNode.simbolo!;
+}
+
 //esta función es solamente a fines demostrativos, puede tomar un texto y generar el array de frecuencias
 export function generarObjDeFrecuencias(a_parsear: string): Object {
-    const letras: string[] = a_parsear.toLowerCase().split('');
+    const letras: string[] = a_parsear.split('');
     const frecuencias = {}
     
     for(let i = 0; i < letras.length; i++) {
