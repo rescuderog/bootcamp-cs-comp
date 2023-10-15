@@ -39,32 +39,49 @@ interface Nodo {
 
 class ArbolBinarioHuffman {
     private _head: Nodo;
+    private _lowest_node: Nodo;
 
-    constructor(first_elem: Nodo, second_elem: Nodo) {
-        this._head = {
-            frecuencia: first_elem.frecuencia + second_elem.frecuencia,
-            nodo_izq: first_elem,
-            nodo_der: second_elem,
-            nodo_madre: null,
-            etiqueta: null
-        }
-        first_elem.nodo_madre = this._head;
-        second_elem.nodo_madre = this._head;
+    sort_by_freq(array_freq: Array<Nodo>): Array<Nodo> {
+        array_freq.sort(function (a, b) {
+            return a.frecuencia - b.frecuencia;
+        })
+        return array_freq;
     }
 
-    agregar_nodo(node_to_add: Nodo) {
-        const nodo_hijo = this._head;
-        this._head = {
-            frecuencia: node_to_add.frecuencia + nodo_hijo.frecuencia,
-            nodo_izq: node_to_add,
-            nodo_der: nodo_hijo,
-            nodo_madre: null,
-            etiqueta: null
+    build_tree(frecuencias: Array<any>) {
+        let auxQueue: Array<Nodo> = [];
+        for(let i = 0; i < frecuencias.length; i++) {
+            const nuevo_nodo: Nodo = {
+                simbolo: frecuencias[i][0],
+                frecuencia: frecuencias[i][1],
+                nodo_madre: null,
+                etiqueta: null
+            }
+        
+            auxQueue.push(nuevo_nodo);
         }
-        node_to_add.nodo_madre = this._head;
-        node_to_add.etiqueta = NodoId.NodoL;
-        nodo_hijo.nodo_madre = this._head;
-        nodo_hijo.etiqueta = NodoId.NodoR
+
+        while(auxQueue.length > 1) {
+            const elem1 = auxQueue.shift()
+            const elem2 = auxQueue.shift()
+
+            if(elem1 && elem2) {
+                this._head = {
+                    frecuencia: elem1.frecuencia + elem2.frecuencia,
+                    nodo_madre: null,
+                    etiqueta: null,
+                    nodo_izq: elem1,
+                    nodo_der: elem2
+                }
+                elem1.nodo_madre = this._head;
+                elem2.nodo_madre = this._head;
+                elem1.etiqueta = NodoId.NodoL;
+                elem2.etiqueta = NodoId.NodoR;
+                auxQueue.push(this._head);
+                auxQueue = this.sort_by_freq(auxQueue);
+            }
+        }
+
     }
 
     public get head() {
@@ -108,6 +125,10 @@ function CalcularCodigo(nodo: Nodo | null): string {
     return codigo.split('').reverse().join('');
 }
 
+function MostrarArbol(arbol: ArbolBinarioHuffman) {
+
+}
+
 //frecuencias de aparicion en el alfabeto segun Wikipedia, ordenado de menor a mayor
 const frecuencias: Object = {
     "w": 0.01,
@@ -145,32 +166,9 @@ for(let key of Object.keys(frecuencias)) {
     arrayDeFrecuencias.push([key, frecuencias[key]]);
 }
 
-const primer_nodo: Nodo = {
-    simbolo: arrayDeFrecuencias[0][0],
-    frecuencia: arrayDeFrecuencias[0][1],
-    nodo_madre: null,
-    etiqueta: NodoId.NodoL
-}
+const arbol = new ArbolBinarioHuffman();
 
-const segundo_nodo: Nodo = {
-    simbolo: arrayDeFrecuencias[1][0],
-    frecuencia: arrayDeFrecuencias[1][1],
-    nodo_madre: null,
-    etiqueta: NodoId.NodoR
-}
-
-const arbol = new ArbolBinarioHuffman(primer_nodo, segundo_nodo);
-
-for(let i = 2; i < arrayDeFrecuencias.length; i++) {
-    const nuevo_nodo: Nodo = {
-        simbolo: arrayDeFrecuencias[i][0],
-        frecuencia: arrayDeFrecuencias[i][1],
-        nodo_madre: null,
-        etiqueta: null
-    }
-
-    arbol.agregar_nodo(nuevo_nodo);
-}
+arbol.build_tree(arrayDeFrecuencias);
 
 for(let i = 0; i < arrayDeFrecuencias.length; i++) {
     console.log("Codigo de Huffman para la letra "+ arrayDeFrecuencias[i][0]);
