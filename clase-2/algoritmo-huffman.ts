@@ -22,7 +22,8 @@
     3. Se repite el paso 2 hasta que sólo quede un árbol.
 */
 
-enum NodoId {
+
+export enum NodoId {
     NodoL,
     NodoR
 }
@@ -37,7 +38,7 @@ interface Nodo {
     etiqueta: NodoId | null;
 };
 
-class ArbolBinarioHuffman {
+export class ArbolBinarioHuffman {
     private _head: Nodo;
     private _lowest_node: Nodo;
 
@@ -90,7 +91,7 @@ class ArbolBinarioHuffman {
     }
 }
 
-function BFSHuffman(simbolo: string, arbol: ArbolBinarioHuffman): Nodo | null {
+export function BFSHuffman(simbolo: string, arbol: ArbolBinarioHuffman): Nodo | null {
     const head: Nodo = arbol.head;
     const queue: Nodo[] = [];
 
@@ -112,7 +113,7 @@ function BFSHuffman(simbolo: string, arbol: ArbolBinarioHuffman): Nodo | null {
     return null;
 }
 
-function CalcularCodigo(nodo: Nodo | null): string {
+export function CalcularCodigo(nodo: Nodo | null): string {
     let codigo: string = "";
     if(nodo === null) return "";
 
@@ -127,7 +128,7 @@ function CalcularCodigo(nodo: Nodo | null): string {
 }
 
 //esta función es solamente a fines demostrativos, puede tomar un texto y generar el array de frecuencias
-function generarArrayDeFrecuencias(a_parsear: string): Object {
+export function generarObjDeFrecuencias(a_parsear: string): Object {
     const letras: string[] = a_parsear.toLowerCase().split('');
     const frecuencias = {}
     
@@ -142,7 +143,7 @@ function generarArrayDeFrecuencias(a_parsear: string): Object {
     return frecuencias
 }
 
-function convertirEnArrayDeFreq(objeto: Object): Array<any>[] {
+export function convertirEnArrayDeFreq(objeto: Object): Array<any>[] {
     const array_freq: Array<any>[] = []
     for(let key of Object.keys(objeto)) {
         array_freq.push([key, objeto[key]]);
@@ -153,35 +154,4 @@ function convertirEnArrayDeFreq(objeto: Object): Array<any>[] {
     })
 
     return array_freq;
-}
-
-//frecuencias de aparicion en el alfabeto segun Wikipedia, ordenado de menor a mayor
-const frecuencias: Object = {
-    "w": 0.01,
-    "k": 0.02,
-    "x": 0.22,
-    "ñ": 0.31,
-    "j": 0.44,
-    "z": 0.52,
-    "f": 0.69,
-    "h": 0.70,
-    "q": 0.88,
-    "y": 0.90,
-    "v": 0.90,
-    "g": 1.01,
-    "b": 1.42,
-    "p": 2.51,
-    "m": 3.15,
-    "u": 3.93,
-    "t": 4.63,
-    "c": 4.68,
-    "l": 4.97,
-    "d": 5.86,
-    "i": 6.25,
-    "n": 6.71,
-    "r": 6.87,
-    "s": 7.98,
-    "o": 8.68,
-    "a": 12.53,
-    "e": 13.68
 }
