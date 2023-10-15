@@ -61,27 +61,28 @@ class ArbolBinarioHuffman {
             auxQueue.push(nuevo_nodo);
         }
 
-        while(auxQueue.length > 1) {
+        while(auxQueue.length > 0) {
             const elem1 = auxQueue.shift()
             const elem2 = auxQueue.shift()
 
             if(elem1 && elem2) {
-                this._head = {
+                const newElem = {
                     frecuencia: elem1.frecuencia + elem2.frecuencia,
                     nodo_madre: null,
                     etiqueta: null,
                     nodo_izq: elem1,
                     nodo_der: elem2
                 }
-                elem1.nodo_madre = this._head;
-                elem2.nodo_madre = this._head;
+                elem1.nodo_madre = newElem;
+                elem2.nodo_madre = newElem;
                 elem1.etiqueta = NodoId.NodoL;
                 elem2.etiqueta = NodoId.NodoR;
-                auxQueue.push(this._head);
+                auxQueue.push(newElem);
                 auxQueue = this.sort_by_freq(auxQueue);
+            } else {
+                this._head = elem1!;
             }
-        }
-
+        } 
     }
 
     public get head() {
