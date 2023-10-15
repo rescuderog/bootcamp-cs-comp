@@ -126,8 +126,33 @@ function CalcularCodigo(nodo: Nodo | null): string {
     return codigo.split('').reverse().join('');
 }
 
-function MostrarArbol(arbol: ArbolBinarioHuffman) {
+//esta función es solamente a fines demostrativos, puede tomar un texto y generar el array de frecuencias
+function generarArrayDeFrecuencias(a_parsear: string): Object {
+    const letras: string[] = a_parsear.toLowerCase().split('');
+    const frecuencias = {}
+    
+    for(let i = 0; i < letras.length; i++) {
+        if(letras[i] in frecuencias) {
+            frecuencias[letras[i]] = frecuencias[letras[i]] + 1;
+        } else {
+            frecuencias[letras[i]] = 1
+        }
+    }
 
+    return frecuencias
+}
+
+function convertirEnArrayDeFreq(objeto: Object): Array<any>[] {
+    const array_freq: Array<any>[] = []
+    for(let key of Object.keys(objeto)) {
+        array_freq.push([key, objeto[key]]);
+    }
+
+    array_freq.sort(function (a, b) {
+        return a[1] - b[1];
+    })
+
+    return array_freq;
 }
 
 //frecuencias de aparicion en el alfabeto segun Wikipedia, ordenado de menor a mayor
@@ -159,19 +184,4 @@ const frecuencias: Object = {
     "o": 8.68,
     "a": 12.53,
     "e": 13.68
-}
-
-const arrayDeFrecuencias: Array<any>[] = [];
-
-for(let key of Object.keys(frecuencias)) {
-    arrayDeFrecuencias.push([key, frecuencias[key]]);
-}
-
-const arbol = new ArbolBinarioHuffman();
-
-arbol.build_tree(arrayDeFrecuencias);
-
-for(let i = 0; i < arrayDeFrecuencias.length; i++) {
-    console.log("Codigo de Huffman para la letra "+ arrayDeFrecuencias[i][0]);
-    console.log(CalcularCodigo(BFSHuffman(arrayDeFrecuencias[i][0], arbol)));
 }
