@@ -22,7 +22,7 @@
     3. Se repite el paso 2 hasta que sólo quede un árbol.
 */
 
-
+//enum, para mayor claridad, que representa los nodos a la izquierda y a la derecha con 0 y 1
 export enum NodoId {
     NodoL,
     NodoR
@@ -40,8 +40,8 @@ interface Nodo {
 
 export class ArbolBinarioHuffman {
     private _head: Nodo;
-    private _lowest_node: Nodo;
 
+    //esta función es usada para rearmar la queue que se usa al construir el árbol, solamente reordena el array por frecuencias
     sort_by_freq(array_freq: Array<Nodo>): Array<Nodo> {
         array_freq.sort(function (a, b) {
             return a.frecuencia - b.frecuencia;
@@ -49,9 +49,12 @@ export class ArbolBinarioHuffman {
         return array_freq;
     }
 
+    //toma como argumento un array de frecuencias tal que cada elemento del mismo sea [key: string, frecuencia: number]
     build_tree(frecuencias: Array<any>) {
+        //se crea una queue auxiliar, para alojar todos los nodos creados por el paso siguiente
         let auxQueue: Array<Nodo> = [];
         for(let i = 0; i < frecuencias.length; i++) {
+            //se pre-popula, de acuerdo a la primera parte del paso 2, la queue de nodos según el array de frecuencias que se le pasa al método
             const nuevo_nodo: Nodo = {
                 simbolo: frecuencias[i][0],
                 frecuencia: frecuencias[i][1],
@@ -62,6 +65,9 @@ export class ArbolBinarioHuffman {
             auxQueue.push(nuevo_nodo);
         }
 
+        //iteramos hasta que no haya más elementos en la queue, y reordenando la misma en cada iteración, para generar el árbol de acuerdo
+        //a lo establecido en el algoritmo: los dos elementos con menor frecuencia siempre conforman un arbol nuevo. Cuando queda sólo uno
+        //lo extraemos de la queue siendo el head, o elemento principal que nos servirá para recorrer el árbol.
         while(auxQueue.length > 0) {
             const elem1 = auxQueue.shift()
             const elem2 = auxQueue.shift()
@@ -92,6 +98,7 @@ export class ArbolBinarioHuffman {
 }
 
 export function BFSHuffman(simbolo: string, arbol: ArbolBinarioHuffman): Nodo | null {
+    //implementación muy básica de Breadth First Search, para buscar en el árbol un símbolo
     const head: Nodo = arbol.head;
     const queue: Nodo[] = [];
 
@@ -114,6 +121,7 @@ export function BFSHuffman(simbolo: string, arbol: ArbolBinarioHuffman): Nodo | 
 }
 
 export function CalcularCodigo(nodo: Nodo | null): string {
+    //toma un nodo y vuelve hacia atrás en el árbol para retornar su código de huffman
     let codigo: string = "";
     if(nodo === null) return "";
 
@@ -128,6 +136,7 @@ export function CalcularCodigo(nodo: Nodo | null): string {
 }
 
 export function CalcularSimbolo(codigo: string, arbol: ArbolBinarioHuffman): string {
+    //dado un código de huffman, va hacia adelante y calcula el símbolo correspondiente a ese código
     let codigo_array = codigo.split('');
     let currentNode = arbol.head;
     for(let cod of codigo_array) {
@@ -142,7 +151,7 @@ export function CalcularSimbolo(codigo: string, arbol: ArbolBinarioHuffman): str
     return currentNode.simbolo!;
 }
 
-//esta función es solamente a fines demostrativos, puede tomar un texto y generar el array de frecuencias
+//funciones solamente demostrativas para generar el array de frecuencias o desde una string, o bien ya desde un objeto predefinido. Se pueden usar combinadas.
 export function generarObjDeFrecuencias(a_parsear: string): Object {
     const letras: string[] = a_parsear.split('');
     const frecuencias = {}

@@ -1,3 +1,9 @@
+/*
+    Una implementación muy básica para demostrar el algoritmo de Huffman y sus bondades. A partir de una string que se proporciona por consola, se la convierte
+    a bits en crudo y a bits mediante el algoritmo de Hufffman, y se muestra las longitudes de las dos cadenas de bits, mostrando la optimización que realiza el
+    algoritmo. Asimismo, se devuelve la string original desde los bits calculados por el algoritmo, para demostrar que no se pierde nada en el proceso.
+*/
+
 import { ArbolBinarioHuffman, BFSHuffman, CalcularCodigo, convertirEnArrayDeFreq, generarObjDeFrecuencias, CalcularSimbolo } from "./algoritmo-huffman";
 import * as readline from 'readline';
 
